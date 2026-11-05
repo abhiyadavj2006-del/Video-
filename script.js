@@ -18,21 +18,57 @@ const EMAILS = [
 ];
 
 let selected = null;
+let currentFilter = "all";
 
 function renderList(filterText) {
   const list = document.getElementById("emailList");
   if (!list) return;
   const q = (filterText || "").toLowerCase();
   list.innerHTML = "";
-  EMAILS.filter(e => !q || (e.sender + " " + e.subject + " " + e.preview).toLowerCase().includes(q))
+  EMAILS.filter(e => matchesFilter(e) && (!q || (e.sender + " " + e.subject + " " + e.preview).toLowerCase().includes(q)))
     .forEach(e => {
       const div = document.createElement("div");
       div.className = "email-item";
-      div.style.cssText = "border:1px solid #ddd;border-radius:8px;padding:10px;margin:8px 0;cursor:pointer";
+      // Styled by the .email-item rule in style.css
       div.innerHTML = "<strong>" + e.sender + "</strong> — " + e.subject + "<br><small>" + e.preview + "</small>";
       div.onclick = () => showAnalysis(e);
       list.appendChild(div);
     });
+}
+
+function matchesFilter(e) {
+  switch (currentFilter) {
+    case "high": return e.priority === "High";
+    case "tasks": return e.tasks.length > 0;
+    case "deadlines": return e.deadline && e.deadline !== "No deadline";
+    case "spam": return e.security === "Suspicious";
+    case "category:Work": return e.category === "Work";
+    case "category:Education": return e.category === "Education";
+    case "category:Personal": return e.category === "Personal";
+    case "category:Finance": return e.category === "Finance";
+    default: return true;
+  }
+}
+
+function updateStats() {
+  const set = (id, value) => { const el = document.getElementById(id); if (el) el.textContent = value; };
+  const taskCount = EMAILS.reduce((n, e) => n + e.tasks.length, 0);
+  const deadlineCount = EMAILS.filter(e => e.deadline && e.deadline !== "No deadline").length;
+  set("emailCount", EMAILS.length);
+  set("highCount", EMAILS.filter(e => e.priority === "High").length);
+  set("tasksCount", taskCount);
+  set("deadlinesCount", deadlineCount);
+  const navCounts = {
+    all: EMAILS.length,
+    high: EMAILS.filter(e => e.priority === "High").length,
+    tasks: taskCount,
+    deadlines: deadlineCount,
+    spam: EMAILS.filter(e => e.security === "Suspicious").length
+  };
+  document.querySelectorAll("aside .nav").forEach(item => {
+    const badge = item.querySelector("span");
+    if (badge && navCounts[item.dataset.filter] !== undefined) badge.textContent = navCounts[item.dataset.filter];
+  });
 }
 
 function showAnalysis(email) {
@@ -57,6 +93,18 @@ function showAnalysis(email) {
 
 document.addEventListener("DOMContentLoaded", () => {
   renderList("");
+  const NAV_FILTERS = ["all", "high", "tasks", "deadlines", "spam", "category:Work", "category:Education", "category:Personal", "category:Finance"];
+  document.querySelectorAll("aside .nav").forEach((item, i) => {
+    item.dataset.filter = NAV_FILTERS[i] || "all";
+    item.addEventListener("click", () => {
+      document.querySelectorAll("aside .nav").forEach(n => n.classList.remove("active"));
+      item.classList.add("active");
+      currentFilter = item.dataset.filter;
+      const searchBox = document.getElementById("search");
+      renderList(searchBox ? searchBox.value : "");
+    });
+  });
+  updateStats();
   const search = document.getElementById("search");
   if (search) search.addEventListener("input", () => renderList(search.value));
   const btn = document.getElementById("analyzeBtn");

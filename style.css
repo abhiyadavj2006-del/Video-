@@ -1,13 +1,14 @@
 /* Basic styling for the AI Email Assistant page.
-   Note: the original script.js (email data + Analyze logic) is missing
-   from this repo — the Analyze button will not work until it is added. */
+   script.js (email data + Analyze Emails logic) is present in this repo,
+   so the email list, search, sidebar filters and Analyze button work. */
 body{font-family:system-ui,Arial,sans-serif;margin:0;line-height:1.5;color:#222}
 header{display:flex;justify-content:space-between;align-items:center;padding:16px 24px;background:#111;color:#fff}
 header .logo{font-size:20px;font-weight:700}
 header button{padding:10px 16px;border:0;border-radius:8px;background:#f59e0b;color:#111;font-weight:700;cursor:pointer}
 .container{display:flex;gap:24px;max-width:1100px;margin:0 auto;padding:24px}
 aside{width:220px;flex-shrink:0}
-aside .nav{padding:8px 10px;border-radius:8px}
+aside .nav{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:8px 10px;border-radius:8px;cursor:pointer}
+aside .nav:hover{background:#f5f5f5}
 aside .nav.active{background:#eee;font-weight:700}
 main{flex:1}
 .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:16px 0}
@@ -17,3 +18,20 @@ main{flex:1}
 .emails,.analysis{flex:1}
 .hidden{display:none}
 input[type=text]{padding:8px;width:100%;box-sizing:border-box}
+.welcome{padding:16px 20px;background:#f7f7f7;border:1px solid #eee;border-radius:12px}
+.welcome h1{margin:0 0 4px}
+.welcome p{margin:0;color:#555}
+.card p{margin:4px 0 0;color:#555}
+.card.danger{border-color:#f3c2c2;background:#fff5f5}
+.card.warning{border-color:#f0dcb0;background:#fffaf0}
+.card.success{border-color:#bfe3c6;background:#f4fbf5}
+.icon{font-size:24px}
+.section-title{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.section-title h2{margin:0}
+.email-item{border:1px solid #ddd;border-radius:8px;padding:10px;margin:8px 0;cursor:pointer}
+.email-item:hover{background:#f7f7f7}
+.big-icon{font-size:48px;text-align:center}
+.analysis-section{margin:16px 0}
+.analysis-section h3{margin:0 0 6px}
+.badge{display:inline-block;padding:2px 10px;border-radius:999px;background:#eee;font-weight:700}
+.category{display:inline-block;padding:2px 10px;border-radius:999px;background:#eef4ff;font-weight:700}

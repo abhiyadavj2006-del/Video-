@@ -5,5 +5,5 @@ AI Mail Assistant — a web page that organises an inbox and highlights what mat
 ## How to run
 Open the live site, or open `index.html` in a browser.
 
-## Status / known gap
-The original `script.js` (email data and the Analyze Emails logic) and the original `style.css` were not in this repo — only the HTML was saved as `New Text Document.txt`. That file is now served as `index.html` with basic styling added, so the page loads, but the email list and Analyze button stay empty until the original `script.js` is added back.
+## Status
+`script.js` (email data and the Analyze Emails logic) is present — it was added on 2026-11-05 with 12 demo emails, so the email list, search, sidebar filters and Analyze button all work. The sidebar counts (total emails, high priority, pending tasks, deadlines) are derived from the demo data, so they always match the emails in `script.js`. To use real emails, replace the `EMAILS` array in `script.js` with real data (or connect an email API).
